@@ -10,8 +10,11 @@ var context;
 var width;
 var height;
 
+// representation of the board as an array of 9 binary bits (000 000 000)
 var xBoard = 0;
 var oBoard = 0;
+
+var counter = 0;
 
 var score = {
     win: 0,
@@ -125,36 +128,38 @@ function isEmpty(xBoard, oBoard, bit) {
     return (((xBoard & bit) == 0) && ((oBoard & bit) == 0));
 }
 
+// marks the board binary array and draws the player move
 function markBit(markBit, player) {
     var bit = 1;
-    var x = 0;
-    var y = 0;
+    var col = 0;
+    var row = 0;
 
     while ((markBit & bit) == 0) {
         bit = bit << 1;
-        x++;
-        if (x > 2) {
-            x = 0;
-            y++;
+        col++;
+        if (col > 2) {
+            col = 0;
+            row++;
         }
     }
+
     if (player === 'O') {
         oBoard = oBoard | bit;
-        drawO(x, y);
+        drawO(col, row);
     } else {
         xBoard = xBoard | bit;
-        drawX(x, y);
+        drawX(col, row);
     }
 }
 
 
 function clickHandler(event) {
-    var x = Math.floor((event.clientX-canvas.offsetLeft)/(width/3));
-    var y = Math.floor((event.clientY - canvas.offsetTop) / (height / 3));
+    var column = Math.floor((event.clientX-canvas.offsetLeft)/(width/3));
+    var row = Math.floor((event.clientY - canvas.offsetTop) / (height / 3));
 
-    var bit = (1 << x + (y * 3));
+    var bit = (1 << column + (row * 3));
 
-    console.log('ch:x=' + x + " ,y=" + y + " ,b=" + bit);
+    console.log('ch:col=' + column + " ,row=" + row + " ,b=" + bit);
     if (isEmpty(xBoard, oBoard, bit)) {
         markBit(bit, 'X');
         if (!checkTie()) {
@@ -172,11 +177,13 @@ function clickHandler(event) {
                     }
                 } else {
                     score.tie++;
+                    restart();
                 }
 
             }
         } else {
             score.tie++;
+            restart();
         }
 
 
@@ -186,7 +193,7 @@ function clickHandler(event) {
     }
 }
 
-function incrementScores() {
+function updateScores() {
     document.getElementById('wins').innerHTML = score.win;
     document.getElementById('losses').innerHTML = score.lost;
     document.getElementById('ties').innerHTML = score.tie;
@@ -212,6 +219,7 @@ function checkWinner(board) {
 }
 
 function calculateRatio(oBoard, xBoard, player, bit, ratio) {
+    counter++;
     var best;
     if (player === 'O') {
         oBoard = oBoard | bit;
@@ -278,7 +286,7 @@ function simulate(oBoard, xBoard) {
 
 
 function restart() {
-    incrementScores();
+    updateScores();
     context.clearRect(0, 0, width, height);
     xBoard = 0;
     oBoard = 0;
@@ -289,7 +297,6 @@ function restart() {
 function checkTie() {
     var tie = false;
     if ((xBoard | oBoard) === 0x1ff) {
-        restart();
         tie = true;
     }
     return tie;
