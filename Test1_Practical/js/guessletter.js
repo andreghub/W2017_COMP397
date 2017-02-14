@@ -30,7 +30,7 @@
   }
 
   $(document).ready(function(){
-    answer=randomLetterAtoZ();
+    answer=randomLetterAZ();
     $('.hintvalue').html(answer);
 
     $("form a#guess").click(function() {
