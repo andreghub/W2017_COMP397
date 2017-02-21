@@ -19,15 +19,35 @@ function init() {
     setShapes();
     startGame();
 }
+
+function drawShape(shapeObj, shapeType){
+    switch(shapeType){
+        case 'square':
+            shapeObj.graphics.drawRect(0, 0, 100, 100);
+            break;
+        case 'triangle':
+            shapeObj.graphics.moveTo(0, 0)
+                            .lineTo(50, 100)
+                            .lineTo(100, 0)
+                            .lineTo(0, 0)
+                            .closePath();;
+            break;
+        case 'circle':
+            shapeObj.graphics.drawCircle(50, 50, 50);
+            break;
+    }
+}
+
 function buildShapes() {
-    var colors = ['blue', 'red', 'green', 'yellow'];
+    var colors = ['blue', 'red', 'green'];
+    var shapeTypes = ['square', 'triangle', 'circle'];
     var i, shape, slot;
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < colors.length; i++) {
         //slots
         slot = new createjs.Shape();
         slot.graphics.beginStroke(colors[i]);
         slot.graphics.beginFill(createjs.Graphics.getRGB(255, 255, 255, 1));
-        slot.graphics.drawRect(0, 0, 100, 100);
+        drawShape(slot, shapeTypes[i])
         slot.regX = slot.regY = 50;
         slot.key = i;
         slot.y = 80;
@@ -37,7 +57,7 @@ function buildShapes() {
         //shapes
         shape = new createjs.Shape();
         shape.graphics.beginFill(colors[i]);
-        shape.graphics.drawRect(0, 0, 100, 100);
+        drawShape(shape, shapeTypes[i])
         shape.regX = shape.regY = 50;
         shape.key = i;
         shapes.push(shape);
@@ -87,7 +107,7 @@ function startDrag(e) {
     });
 }
 function checkGame(){
-    if(score == 4){
+    if(score == 3){
         alert('You Win!');
     }
 }
