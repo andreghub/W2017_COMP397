@@ -48,7 +48,13 @@
 
         triangle = new createjs.Shape();
         triangle.graphics.beginFill('yellow').beginStroke("yellow");
-        triangle.graphics.moveTo(stage.canvas.width / 4 -30, stage.canvas.height / 2 + 60).lineTo(stage.canvas.width / 4, stage.canvas.height / 2).lineTo(stage.canvas.width / 4 +30, stage.canvas.height / 2 + 60).lineTo(stage.canvas.width / 4 -30, stage.canvas.height / 2 + 60).closePath();
+        triangle.x = stage.canvas.width / 4;
+        triangle.y = stage.canvas.height / 2;
+        triangle.graphics.moveTo(-30, 60)
+                            .lineTo(0, 0)
+                            .lineTo(30, 60)
+                            .lineTo(-30, 60)
+                            .closePath();
         stage.addChild(triangle);
         triangle.cursor = 'text';
 
