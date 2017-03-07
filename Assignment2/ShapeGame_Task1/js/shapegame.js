@@ -1,12 +1,16 @@
-/*
+/**************************
  * HomeWork: Due March 7th
- *  . Draw three target shapes (square, triangle and circle) at the top half of the stage
- *  . Draw three source shapes (square, triangle and circle) at the bottom half of the stage
- *  . Write drag-and-drop handlers (as below) for the source shapes so that:
- *      . When a shape is dropped over its corresponding shape it should fall and the source be removed from the stage
- *      . When a shape is dropped over a non-corresponding shape it should go back to its starting position (via a tweening animation as in the code below)
- *      . When all shapes are dropped successfully show a stylized winning message
-*/
+ * . Draw three target shapes (rectangle, circle and triangle) in the top half of the stage
+ * . Draw three source shapes (again rectangle, circle and triangle) in the bottom half of the stage
+ * . Write drag-and-drop handlers (as below) for the source shapes so that:
+ *    . when a shape is dropped over it's corresponding shape (triangle over triangle f.e.) 
+ *       it should fall and the source should be removed from the stage
+ *    . when a shape is dropped over a non-corresponding shape (triangle over rectangle f.e.) 
+ *       it should go back to its starting position (via a tweening animation as in the code below) 
+ *    . when all shapes are dropped successfully show a stylized winning message
+ */
+
+
 
 var stage;
 var shapes = [];
@@ -30,7 +34,7 @@ function drawShape(shapeObj, shapeType){
                             .lineTo(50, 100)
                             .lineTo(100, 0)
                             .lineTo(0, 0)
-                            .closePath();;
+                            .closePath();
             break;
         case 'circle':
             shapeObj.graphics.drawCircle(50, 50, 50);
@@ -83,6 +87,7 @@ function startGame() {
     createjs.Ticker.addEventListener("tick", function (e) {
         stage.update();
     });
+     
 }
 function startDrag(e) {
     var shape = e.target;
@@ -108,6 +113,12 @@ function startDrag(e) {
 }
 function checkGame(){
     if(score == 3){
-        alert('You Win!');
+       var de = new createjs.DOMElement(winMessage);
+        de.alpha = 0;
+        de.regY = 400;
+        de.x = stage.canvas.width / 4;
+        de.y = 0;
+        stage.addChild(de);
+        createjs.Tween.get(de).wait(200).to({y:150, alpha:1}, 2000, createjs.Ease.quadOut);
     }
 }
