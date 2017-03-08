@@ -24,6 +24,7 @@ var lettersNeeded = 0;
 function init() {
     stage = new createjs.Stage("canvas");
     drawBoard();
+    drawHangedMan();
     drawLetters();
     drawMessages();
     startGame();
@@ -53,6 +54,104 @@ function drawBoard() {
             yPos += 40;
             xPos = 20;
         }
+
+    }
+}
+
+function drawHangedMan(playerLost) {
+    // if player lost, draw the hangedman completly again
+    // if not, just draw it incrementally
+    switch(lives){
+        case 0:
+            //draw feet
+            var shape = new createjs.Shape();
+            shape.graphics.beginStroke("#000")
+                .moveTo(480,225).lineTo(455,250)
+                .moveTo(480,225).lineTo(505,250)
+                .closePath();
+            stage.addChild(shape);
+            
+            if(!playerLost)
+                break;
+
+        case 1:
+            //draw hands
+            var shape = new createjs.Shape();
+            shape.graphics.beginStroke("#000")
+                .moveTo(480,160).lineTo(455,175)
+                .moveTo(480,160).lineTo(505,175)
+                .closePath();
+            stage.addChild(shape);
+            
+            if(!playerLost)
+                break;
+
+        case 2:
+            //draw torso
+            var shape = new createjs.Shape();
+            shape.graphics.beginStroke("#000")
+                .moveTo(480,140).lineTo(480,225)
+                .closePath();
+            stage.addChild(shape);
+            
+            if(!playerLost)
+                break;
+
+        case 3:
+            //draw head
+            var shape = new createjs.Shape();
+            shape.graphics.beginStroke("#000");
+            shape.graphics.drawCircle(0, 0, 15);
+            shape.x = 480;
+            shape.y = 125;
+            stage.addChild(shape);
+            
+            if(!playerLost)
+                break;
+
+        case 4:
+            //draw rope
+            var shape = new createjs.Shape();
+            shape.graphics.beginStroke("#f00")
+                .moveTo(480,80).lineTo(480,110)
+                .closePath();
+            stage.addChild(shape);
+            
+            if(!playerLost)
+                break;
+
+        case 5:
+            //draw platform
+            var shape = new createjs.Shape(); // platform base
+            shape.graphics.beginStroke("#000").beginFill("#000");
+            shape.graphics.drawRect(0, 0, 100, 15);
+            shape.x = 350;
+            shape.y = 260;
+            stage.addChild(shape);
+
+            shape = new createjs.Shape(); // platform stick
+            shape.graphics.beginStroke("#000").beginFill("#000");
+            shape.graphics.drawRect(0, 0, 10, -230);
+            shape.x = 395;
+            shape.y = 260;
+            stage.addChild(shape);
+
+            shape = new createjs.Shape(); // platform stick
+            shape.graphics.beginStroke("#000").beginFill("#000");
+            shape.graphics.drawRect(0, 0, 70, 10);
+            shape.x = 405;
+            shape.y = 30;
+            stage.addChild(shape);
+
+            shape = new createjs.Shape(); // platform stick
+            shape.graphics.beginStroke("#000").beginFill("#000");
+            shape.graphics.drawRect(0, 0, 10, 50);
+            shape.x = 475;
+            shape.y = 30;
+            stage.addChild(shape);
+            console.log(!playerLost);
+            if(!playerLost)
+                break;
 
     }
 }
@@ -106,11 +205,14 @@ function drawMessages() {
 }
 
 function onLetterClick(e) {
-    var btn = e.target;
-    var txt = btn.txt;
-    btn.removeEventListener('click', onLetterClick);
-    checkForMatches(txt);
-    checkGame();
+    if(lives > 0){
+        var btn = e.target;
+        var txt = btn.txt;
+        btn.removeEventListener('click', onLetterClick);
+        checkForMatches(txt);
+        drawHangedMan();
+        checkGame();
+    }
 }
 
 function checkForMatches(txt) {
@@ -146,7 +248,7 @@ function checkGame() {
         gameOver();
     } else if (lives == 0) {
         win = false;
-        gameOver();
+        setTimeout(gameOver,3000);
     }
 }
 
@@ -157,9 +259,12 @@ function gameOver() {
     gameOverTxt.color = win ? 'blue' : 'red';
     gameOverTxt.textAlign = 'center';
     gameOverTxt.textBaseline = 'middle';
-    gameOverTxt.x = stage.canvas.width / 2;
+    gameOverTxt.x = stage.canvas.width / 2 - (win ? 0 : 100);
     gameOverTxt.y = stage.canvas.height / 2;
     stage.addChild(gameOverTxt);
+
+    if(!win)
+        drawHangedMan(true);
 }
 
 function startGame() {

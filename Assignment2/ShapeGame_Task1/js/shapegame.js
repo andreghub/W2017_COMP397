@@ -55,7 +55,7 @@ function buildShapes() {
         slot.regX = slot.regY = 50;
         slot.key = i;
         slot.y = 80;
-        slot.x = (i * 130) + 100;
+        slot.x = (i * 200) + 100;
         stage.addChild(slot);
         slots.push(slot);
         //shapes
@@ -74,7 +74,7 @@ function setShapes() {
         r = Math.floor(Math.random() * shapes.length);
         shape = shapes[r];
         shape.homeY = 320;
-        shape.homeX = (i * 130) + 100;
+        shape.homeX = (i * 200) + 100;
         shape.y = shape.homeY;
         shape.x = shape.homeX;
         shape.addEventListener("mousedown", startDrag);
