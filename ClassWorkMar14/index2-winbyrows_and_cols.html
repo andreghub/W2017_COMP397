@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="../lib/easeljs-0.7.1.min.js"></script>
+</head>
+
+<body onload="init()">
+
+<canvas id="canvas" width="1000" height="800"></canvas>
+
+</body>
+
+<script>
+	const NR_ROWS=6;
+	const NR_COLS=7;
+	
+	var board=[
+	 [0,0,0,0,0,0,0],
+	 [0,0,0,2,0,0,0],
+	 [0,0,0,2,0,0,0],
+	 [0,0,0,2,1,1,1],
+	 [2,1,2,2,2,2,1],
+	 [1,1,1,1,2,2,2],	 
+	];
+    function init() {
+		//var win=checkForWin(1);
+		var win=checkForWin(2);
+		console.log("win="+win);
+    }
+	function checkForWin(player){
+		var win=false, win1=false;
+		win=checkForWinByRows(player);
+		console.log("win after checkForWinByRows="+win+" [player:"+player+"]");
+		
+		win1 = checkForWinByColumns(player);
+		console.log("win1 after checkForWinByColumns="+win1+" [player:"+player+"]");
+		
+		win=win || win1;
+		
+		
+		return win || win1;
+	}
+	function checkForWinByRows(player){
+		var win=false;
+		for(var i=0;i<NR_ROWS;i++){
+			//check for win by row i
+			console.log("row:"+board[i]);
+			for(var j=0;j<NR_COLS;j++){
+				if(board[i][j]==player){
+					console.log("j="+j);
+					if(NR_COLS-j>=4){
+						var nr_tokens=1;
+						for(var k=j+1; k< NR_COLS;k++)
+						{
+							if(board[i][k]==player)
+							{
+								nr_tokens += 1;
+								console.log("nr_tokens:"+nr_tokens);
+								if(nr_tokens == 4){
+									return true;
+								}
+							}
+						}
+					} 
+					else
+					{
+						//no win here
+					}
+				}
+			}
+		}
+		return win;
+	}
+	function checkForWinByColumns(player){
+		var win=false;
+		for(var i=0;i<NR_COLS;i++){
+			//check for win by col i
+			//print out the column i
+			console.log("col:");
+			for(var j=0;j<NR_ROWS;j++){
+				console.log(board[j][i]);
+			}
+			
+			for(var j=0;j<NR_ROWS;j++){
+				if(board[j][i]==player){
+					console.log("j="+j);
+					if(NR_ROWS-j>=4){
+						var nr_tokens=1;
+						for(var k=j+1; k< NR_ROWS;k++)
+						{
+							if(board[k][i]==player)
+							{
+								nr_tokens += 1;
+								console.log("nr_tokens:"+nr_tokens);
+								if(nr_tokens == 4){
+									return true;
+								}
+							}
+						}
+					} 
+					else
+					{
+						//no win here
+					}
+				}
+			}
+		}
+		
+		
+		return win;
+	}
+	
+</script>
+</html>
